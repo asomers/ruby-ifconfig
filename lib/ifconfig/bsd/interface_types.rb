@@ -27,6 +27,8 @@ class NetworkAdapter
         when /^\s*enabled=/
           # NetBSD uses "enabled="
           parse_capabilities(line)
+        when /^\s*status:/
+          parse_status(line)
       end
     }
   end
@@ -48,7 +50,15 @@ class NetworkAdapter
   def parse_flags(line)
     flags = line.match(/\<(\S+)\>/i)[1]
     @flags = flags.strip.split(',')
-    @status = true if @flags.include?('UP')
+  end
+
+  # parses the "status: active" line
+  #
+  def parse_status(line)
+    match = line.match(/status: (\S+)/)
+    if match
+      @status = match[1]
+    end
   end
 
   # Parses networks on an interface based on the first token in the line.
