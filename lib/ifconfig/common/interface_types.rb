@@ -4,7 +4,7 @@ class NetworkAdapter
   def initialize(name, ifacetxt, netstattxt=nil)
     @name = name
     @ifconfig = ifacetxt
-    @status = false
+    @status = nil
     @protos = ['inet','inet6','IPX/Ethernet II',
                'IPX/Ethernet SNAP',
                'IPX/Ethernet 802.2',
@@ -60,7 +60,11 @@ class NetworkAdapter
   end
 
   def up?
-    return status
+    return flags.include? "UP"
+  end
+
+  def link_up?
+    return @status == "active"
   end
 
   # returns array of arrays
@@ -119,7 +123,7 @@ class NetworkAdapter
     s += " Fib: #{@fib}\n" if @fib != 0
     s += " Lagg Proto: #{@laggproto}\n" if @laggproto
     s += " Lagg Children: #{@lagg_children}\n" if @lagg_children
-    s += " Status: UP" if self.status
+    s += " Status: #{@status}"
     return s
   end
 end

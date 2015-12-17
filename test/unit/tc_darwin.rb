@@ -38,4 +38,10 @@ class TC_DarwinTest < Test::Unit::TestCase
 
   end
 
+  def test_link_status
+    assert(@cfg['en0'].status == 'active' &&
+          !@cfg['fw0'].status == 'inactive',
+           "Failed to parse link status")
+  end
+
 end
